@@ -4,6 +4,56 @@
   
   
   <entry>
+    <title>NO.3 XSS渗透与攻防</title>
+    <link href="/2025/02/05/XSS%E6%B8%97%E9%80%8F%E4%B8%8E%E9%98%B2%E5%BE%A1/"/>
+    <url>/2025/02/05/XSS%E6%B8%97%E9%80%8F%E4%B8%8E%E9%98%B2%E5%BE%A1/</url>
+    
+    <content type="html"><![CDATA[<p>正在编写中 ……</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>渗透与防御</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>XSS</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>NO.2 SQL注入渗透与攻防</title>
+    <link href="/2025/02/04/SQL%E6%B3%A8%E5%85%A5%E6%B8%97%E9%80%8F%E4%B8%8E%E6%94%BB%E9%98%B2/"/>
+    <url>/2025/02/04/SQL%E6%B3%A8%E5%85%A5%E6%B8%97%E9%80%8F%E4%B8%8E%E6%94%BB%E9%98%B2/</url>
+    
+    <content type="html"><![CDATA[<p>SQL注入是由于<a href="https://baike.baidu.com/item/web%20app/9475982">web应用程序</a>未正确验证用户输入，使得攻击者可以通过添加恶意的<a href="https://baike.baidu.com/item/sql%E8%AF%AD%E5%8F%A5?fromModule=lemma_search-box">SQL语句</a>来操纵数据库查询。</p><span id="more"></span><p>正在编写中……</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>渗透与防御</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>SQL注入</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>NO.1 必看⭐️漏洞分析自测框架</title>
     <link href="/2025/02/04/%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6/"/>
     <url>/2025/02/04/%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6/</url>
