@@ -4,23 +4,23 @@
   
   
   <entry>
-    <title>sqli-labs靶机</title>
-    <link href="/2025/02/05/sqli-labs%E9%9D%B6%E6%9C%BA/"/>
-    <url>/2025/02/05/sqli-labs%E9%9D%B6%E6%9C%BA/</url>
+    <title>sqli-labs靶场笔记</title>
+    <link href="/2025/02/05/sqli-labs-notes/"/>
+    <url>/2025/02/05/sqli-labs-notes/</url>
     
-    <content type="html"><![CDATA[<p><strong>由于个人水平有限，文中难免存在不足，欢迎各位师傅不吝赐教、指出问题，期待我们共同进步！</strong></p><span id="more"></span><h1 id="使用说明"><a href="#使用说明" class="headerlink" title="使用说明"></a>使用说明</h1><p>我的靶机基于小皮面板在本机环境下运行，如有需要可查看其他师傅的<a href="https://blog.csdn.net/Joker_Dgh/article/details/123913722">文章</a>。</p><p>在关卡源码中找到要执行的SQL语句，在下面加入以下代码，方便我们理解执行的SQL命令（熟练掌握后便无需再查看，毕竟在实战场景中无法看到执行语句，只能依靠经验判断）</p><p><img src="/sqli-labs%E9%9D%B6%E6%9C%BA/image-20250205132744524.png"></p>]]></content>
+    <content type="html"><![CDATA[<p><strong>由于个人水平有限，文中难免存在不足，欢迎各位师傅不吝赐教、指出问题，期待我们共同进步！</strong></p><span id="more"></span><h1 id="使用说明"><a href="#使用说明" class="headerlink" title="使用说明"></a>使用说明</h1><p>我的靶机基于小皮面板在本机环境下运行，如有需要可查看其他师傅的<a href="https://blog.csdn.net/Joker_Dgh/article/details/123913722">文章</a>。</p><p>在关卡源码中找到要执行的SQL语句，在下面加入以下代码，方便我们理解执行的SQL命令（熟练掌握后便无需再查看，毕竟在实战场景中无法看到执行语句，只能依靠经验判断）</p><p><img src="/2025/02/05/sqli-labs-notes/image-20250205145136337.png" alt="输出查询语句"></p>]]></content>
     
     
     <categories>
       
-      <category>渗透与防御</category>
+      <category>SQL注入</category>
       
     </categories>
     
     
     <tags>
       
-      <tag>靶机</tag>
+      <tag>靶场</tag>
       
     </tags>
     
