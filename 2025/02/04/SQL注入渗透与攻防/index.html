@@ -19,15 +19,15 @@
   <meta name="author" content="椰子">
   <meta name="keywords" content="技术博客,生活随笔,学习笔记,个人博客">
   
-    <meta name="description" content="SQL注入是由于web应用程序未正确验证用户输入，使得攻击者可以通过添加恶意的SQL语句来操纵数据库查询。">
+    <meta name="description" content="正在编写中……">
 <meta property="og:type" content="article">
 <meta property="og:title" content="NO.2 SQL注入渗透与攻防">
 <meta property="og:url" content="https://kaopuye.github.io/2025/02/04/SQL%E6%B3%A8%E5%85%A5%E6%B8%97%E9%80%8F%E4%B8%8E%E6%94%BB%E9%98%B2/index.html">
 <meta property="og:site_name" content="kaopuye.github.io | 靠谱椰">
-<meta property="og:description" content="SQL注入是由于web应用程序未正确验证用户输入，使得攻击者可以通过添加恶意的SQL语句来操纵数据库查询。">
+<meta property="og:description" content="正在编写中……">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-02-04T15:46:02.289Z">
-<meta property="article:modified_time" content="2025-02-04T16:38:43.771Z">
+<meta property="article:modified_time" content="2025-02-06T02:37:09.870Z">
 <meta property="article:author" content="椰子">
 <meta property="article:tag" content="SQL注入">
 <meta name="twitter:card" content="summary_large_image">
@@ -223,7 +223,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          49 字
+          972 字
         
       </span>
     
@@ -234,7 +234,7 @@
         
         
         
-          1 分钟
+          9 分钟
         
       </span>
     
@@ -276,10 +276,235 @@
             
               <div class="markdown-body">
                 
-                <p>SQL注入是由于<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/web%20app/9475982">web应用程序</a>未正确验证用户输入，使得攻击者可以通过添加恶意的<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/sql%E8%AF%AD%E5%8F%A5?fromModule=lemma_search-box">SQL语句</a>来操纵数据库查询。</p>
+                <p><strong>正在编写中……</strong></p>
 <span id="more"></span>
 
-<p>正在编写中……</p>
+<h1 id="一、漏洞原理"><a href="#一、漏洞原理" class="headerlink" title="一、漏洞原理"></a>一、漏洞原理</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>SQL注入是由于<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/web%20app/9475982">web应用程序</a>未正确验证用户输入，使得攻击者可以通过添加恶意的<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/sql%E8%AF%AD%E5%8F%A5?fromModule=lemma_search-box">SQL语句</a>来操纵数据库查询。</p>
+<h2 id="成因分析"><a href="#成因分析" class="headerlink" title="成因分析"></a>成因分析</h2><ol>
+<li>未对用户输入进行有效过滤</li>
+<li>使用动态拼接SQL语句</li>
+<li>未使用参数化查询</li>
+<li>过于宽松的数据库权限</li>
+<li>错误信息暴露过多细节</li>
+</ol>
+<h2 id="相关知识"><a href="#相关知识" class="headerlink" title="相关知识"></a>相关知识</h2><h3 id="MySQL基础"><a href="#MySQL基础" class="headerlink" title="MySQL基础"></a>MySQL基础</h3><p>MySQL默认包含以下数据库：</p>
+<ul>
+<li>sys</li>
+<li>mysql</li>
+<li>performance_schema</li>
+<li>information_schema（5.0版本以上）</li>
+</ul>
+<h3 id="重要系统表"><a href="#重要系统表" class="headerlink" title="重要系统表"></a>重要系统表</h3><ol>
+<li><p>SCHEMATA表</p>
+<ul>
+<li>存放数据库名信息</li>
+<li>SCHEMA_NAME字段记录库名</li>
+</ul>
+</li>
+<li><p>TABLES表</p>
+<ul>
+<li>TABLE_SCHEMA记录数据库名</li>
+<li>TABLE_NAME记录表名</li>
+</ul>
+</li>
+<li><p>COLUMNS表</p>
+<ul>
+<li>TABLE_SCHEMA记录数据库名</li>
+<li>TABLE_NAME记录表名</li>
+<li>COLUMN_NAME记录字段名</li>
+</ul>
+</li>
+</ol>
+<h3 id="常用函数"><a href="#常用函数" class="headerlink" title="常用函数"></a>常用函数</h3><ol>
+<li><p>字符串处理</p>
+<ul>
+<li>concat()：字符串连接</li>
+<li>substr()：截取字符串</li>
+<li>length()：字符串长度</li>
+<li>ascii()/ord()：字符转ASCII码</li>
+</ul>
+</li>
+<li><p>系统信息</p>
+<ul>
+<li>version()：MySQL版本</li>
+<li>user()：当前用户</li>
+<li>database()：当前数据库</li>
+<li>@@datadir：数据存储路径</li>
+</ul>
+</li>
+</ol>
+<h1 id="二、漏洞检测"><a href="#二、漏洞检测" class="headerlink" title="二、漏洞检测"></a>二、漏洞检测</h1><h2 id="注入点探测"><a href="#注入点探测" class="headerlink" title="注入点探测"></a>注入点探测</h2><h3 id="常见注入点"><a href="#常见注入点" class="headerlink" title="常见注入点"></a>常见注入点</h3><ol>
+<li>GET参数</li>
+<li>POST参数</li>
+<li>Cookie</li>
+<li>HTTP头</li>
+<li>文件上传名</li>
+</ol>
+<h3 id="判断方法"><a href="#判断方法" class="headerlink" title="判断方法"></a>判断方法</h3><ol>
+<li><p>数字型测试</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">and</span> <span class="hljs-number">1</span><span class="hljs-operator">=</span><span class="hljs-number">1</span><br><span class="hljs-keyword">and</span> <span class="hljs-number">1</span><span class="hljs-operator">=</span><span class="hljs-number">2</span><br><span class="hljs-operator">+</span><span class="hljs-number">1</span><br><span class="hljs-number">-1</span><br></code></pre></td></tr></table></figure></li>
+<li><p>字符型测试</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-string">&#x27;and&#x27;</span><span class="hljs-number">1</span><span class="hljs-string">&#x27;=&#x27;</span><span class="hljs-number">1</span><br><span class="hljs-string">&#x27;and&#x27;</span><span class="hljs-number">1</span><span class="hljs-string">&#x27;=&#x27;</span><span class="hljs-number">2</span><br>&quot;and&quot;<span class="hljs-number">1</span>&quot;=&quot;<span class="hljs-number">1</span><br></code></pre></td></tr></table></figure></li>
+<li><p>搜索型测试</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-number">1</span><span class="hljs-operator">%</span><span class="hljs-string">&#x27; and 1=1 and &#x27;</span><span class="hljs-operator">%</span><span class="hljs-string">&#x27;=&#x27;</span><br><span class="hljs-number">1</span><span class="hljs-operator">%</span><span class="hljs-string">&#x27; and 1=2 and &#x27;</span><span class="hljs-operator">%</span><span class="hljs-string">&#x27;=&#x27;</span><br></code></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="注入类型识别"><a href="#注入类型识别" class="headerlink" title="注入类型识别"></a>注入类型识别</h2><h3 id="Union注入检测"><a href="#Union注入检测" class="headerlink" title="Union注入检测"></a>Union注入检测</h3><ol>
+<li><p>order by判断字段数</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sql">?id<span class="hljs-operator">=</span><span class="hljs-number">1</span><span class="hljs-string">&#x27; order by 1#</span><br><span class="hljs-string">?id=1&#x27;</span> <span class="hljs-keyword">order</span> <span class="hljs-keyword">by</span> <span class="hljs-number">2</span>#<br></code></pre></td></tr></table></figure></li>
+<li><p>union select测试</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql">?id<span class="hljs-operator">=</span><span class="hljs-number">-1</span><span class="hljs-string">&#x27; union select 1,2,3#</span><br></code></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="布尔盲注检测"><a href="#布尔盲注检测" class="headerlink" title="布尔盲注检测"></a>布尔盲注检测</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sql">?id<span class="hljs-operator">=</span><span class="hljs-number">1</span><span class="hljs-string">&#x27; and ascii(substr(database(),1,1))&gt;97#</span><br><span class="hljs-string">?id=1&#x27;</span> <span class="hljs-keyword">and</span> length(database())<span class="hljs-operator">&gt;</span><span class="hljs-number">5</span>#<br></code></pre></td></tr></table></figure>
+
+<h3 id="时间盲注检测"><a href="#时间盲注检测" class="headerlink" title="时间盲注检测"></a>时间盲注检测</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sql">?id<span class="hljs-operator">=</span><span class="hljs-number">1</span><span class="hljs-string">&#x27; and sleep(5)#</span><br><span class="hljs-string">?id=1&#x27;</span> <span class="hljs-keyword">and</span> if(length(database())<span class="hljs-operator">&gt;</span><span class="hljs-number">5</span>,sleep(<span class="hljs-number">5</span>),<span class="hljs-number">0</span>)#<br></code></pre></td></tr></table></figure>
+
+<h3 id="报错注入检测"><a href="#报错注入检测" class="headerlink" title="报错注入检测"></a>报错注入检测</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sql">?id<span class="hljs-operator">=</span><span class="hljs-number">1</span><span class="hljs-string">&#x27; and updatexml(1,concat(0x7e,database(),0x7e),1)#</span><br><span class="hljs-string">?id=1&#x27;</span> <span class="hljs-keyword">and</span> extractvalue(<span class="hljs-number">1</span>,concat(<span class="hljs-number">0x7e</span>,database(),<span class="hljs-number">0x7e</span>))#<br></code></pre></td></tr></table></figure>
+
+<h2 id="自动化检测工具"><a href="#自动化检测工具" class="headerlink" title="自动化检测工具"></a>自动化检测工具</h2><ul>
+<li>SQLmap</li>
+<li>AWVS</li>
+<li>Burp Suite</li>
+<li>Nmap</li>
+</ul>
+<h1 id="三、漏洞危害"><a href="#三、漏洞危害" class="headerlink" title="三、漏洞危害"></a>三、漏洞危害</h1><h2 id="数据安全"><a href="#数据安全" class="headerlink" title="数据安全"></a>数据安全</h2><ol>
+<li><p>数据泄露</p>
+<ul>
+<li>用户信息泄露</li>
+<li>业务数据泄露</li>
+<li>系统配置泄露</li>
+</ul>
+</li>
+<li><p>数据完整性破坏</p>
+<ul>
+<li>篡改数据</li>
+<li>删除数据</li>
+<li>插入恶意数据</li>
+</ul>
+</li>
+</ol>
+<h2 id="系统安全"><a href="#系统安全" class="headerlink" title="系统安全"></a>系统安全</h2><ol>
+<li><p>权限提升</p>
+<ul>
+<li>获取管理员权限</li>
+<li>绕过登录认证</li>
+<li>执行高权限操作</li>
+</ul>
+</li>
+<li><p>服务器控制</p>
+<ul>
+<li>读取系统文件</li>
+<li>写入Webshell</li>
+<li>获取系统权限</li>
+</ul>
+</li>
+</ol>
+<h2 id="业务影响"><a href="#业务影响" class="headerlink" title="业务影响"></a>业务影响</h2><ol>
+<li>服务中断</li>
+<li>信息泄露</li>
+<li>声誉损失</li>
+<li>经济损失</li>
+</ol>
+<h1 id="四、防御修复"><a href="#四、防御修复" class="headerlink" title="四、防御修复"></a>四、防御修复</h1><h2 id="代码层面"><a href="#代码层面" class="headerlink" title="代码层面"></a>代码层面</h2><h3 id="1-参数化查询"><a href="#1-参数化查询" class="headerlink" title="1. 参数化查询"></a>1. 参数化查询</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-comment">// PHP PDO示例</span><br><span class="hljs-variable">$stmt</span> = <span class="hljs-variable">$pdo</span>-&gt;<span class="hljs-title function_ invoke__">prepare</span>(<span class="hljs-string">&quot;SELECT * FROM users WHERE id = ?&quot;</span>);<br><span class="hljs-variable">$stmt</span>-&gt;<span class="hljs-title function_ invoke__">execute</span>([<span class="hljs-variable">$id</span>]);<br><br><span class="hljs-comment">// Java PreparedStatement示例</span><br>PreparedStatement stmt = conn.<span class="hljs-title function_ invoke__">prepareStatement</span>(<span class="hljs-string">&quot;SELECT * FROM users WHERE id = ?&quot;</span>);<br>stmt.<span class="hljs-title function_ invoke__">setInt</span>(<span class="hljs-number">1</span>, id);<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-输入验证"><a href="#2-输入验证" class="headerlink" title="2. 输入验证"></a>2. 输入验证</h3><ul>
+<li>类型检查</li>
+<li>长度限制</li>
+<li>格式验证</li>
+<li>白名单过滤</li>
+</ul>
+<h3 id="3-错误处理"><a href="#3-错误处理" class="headerlink" title="3. 错误处理"></a>3. 错误处理</h3><ul>
+<li>统一错误页面</li>
+<li>禁用错误显示</li>
+<li>日志记录</li>
+</ul>
+<h2 id="数据库配置"><a href="#数据库配置" class="headerlink" title="数据库配置"></a>数据库配置</h2><h3 id="1-权限控制"><a href="#1-权限控制" class="headerlink" title="1. 权限控制"></a>1. 权限控制</h3><ul>
+<li>最小权限原则</li>
+<li>账号权限分离</li>
+<li>定期审计</li>
+</ul>
+<h3 id="2-安全设置"><a href="#2-安全设置" class="headerlink" title="2. 安全设置"></a>2. 安全设置</h3><ul>
+<li>修改默认端口</li>
+<li>禁用危险函数</li>
+<li>启用安全日志</li>
+</ul>
+<h2 id="部署防护"><a href="#部署防护" class="headerlink" title="部署防护"></a>部署防护</h2><h3 id="1-WAF配置"><a href="#1-WAF配置" class="headerlink" title="1. WAF配置"></a>1. WAF配置</h3><ul>
+<li>SQL注入规则</li>
+<li>特征识别</li>
+<li>行为分析</li>
+</ul>
+<h3 id="2-监控告警"><a href="#2-监控告警" class="headerlink" title="2. 监控告警"></a>2. 监控告警</h3><ul>
+<li>异常访问监控</li>
+<li>数据库审计</li>
+<li>实时告警</li>
+</ul>
+<h1 id="五、绕过技术"><a href="#五、绕过技术" class="headerlink" title="五、绕过技术"></a>五、绕过技术</h1><h2 id="WAF绕过"><a href="#WAF绕过" class="headerlink" title="WAF绕过"></a>WAF绕过</h2><h3 id="1-注释符变换"><a href="#1-注释符变换" class="headerlink" title="1. 注释符变换"></a>1. 注释符变换</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-number">1</span><span class="hljs-string">&#x27;/**/union/**/select/**/1,2,3#</span><br><span class="hljs-string">1&#x27;</span><span class="hljs-comment">/*!union*/</span><span class="hljs-comment">/*!select*/</span><span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>#<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-大小写混淆"><a href="#2-大小写混淆" class="headerlink" title="2. 大小写混淆"></a>2. 大小写混淆</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-number">1</span><span class="hljs-string">&#x27; UnIoN/**/SeLeCt 1,2,3#</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="3-编码转换"><a href="#3-编码转换" class="headerlink" title="3. 编码转换"></a>3. 编码转换</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-number">1</span><span class="hljs-string">&#x27;%20union%20select%201,2,3%23</span><br><span class="hljs-string">1&#x27;</span> <span class="hljs-keyword">union</span> <span class="hljs-keyword">select</span> <span class="hljs-number">0x31</span>,<span class="hljs-number">0x32</span>,<span class="hljs-number">0x33</span>#<br></code></pre></td></tr></table></figure>
+
+<h3 id="4-等价替换"><a href="#4-等价替换" class="headerlink" title="4. 等价替换"></a>4. 等价替换</h3><ul>
+<li>字符串函数替换</li>
+<li>条件语句变形</li>
+<li>注释符置换</li>
+</ul>
+<h2 id="防御绕过"><a href="#防御绕过" class="headerlink" title="防御绕过"></a>防御绕过</h2><h3 id="1-二次注入"><a href="#1-二次注入" class="headerlink" title="1. 二次注入"></a>1. 二次注入</h3><ul>
+<li>存储型注入</li>
+<li>二次编码</li>
+<li>延迟触发</li>
+</ul>
+<h3 id="2-宽字节注入"><a href="#2-宽字节注入" class="headerlink" title="2. 宽字节注入"></a>2. 宽字节注入</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql">id<span class="hljs-operator">=</span><span class="hljs-number">1</span><span class="hljs-operator">%</span>df<span class="hljs-string">&#x27; union select 1,2,3#</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="3-特殊技术"><a href="#3-特殊技术" class="headerlink" title="3. 特殊技术"></a>3. 特殊技术</h3><ul>
+<li>堆叠注入</li>
+<li>缓冲区溢出</li>
+<li>特殊字符</li>
+</ul>
+<h1 id="应急处置"><a href="#应急处置" class="headerlink" title="应急处置"></a>应急处置</h1><h2 id="入侵检测"><a href="#入侵检测" class="headerlink" title="入侵检测"></a>入侵检测</h2><ol>
+<li><p>日志分析</p>
+<ul>
+<li>Web访问日志</li>
+<li>数据库日志</li>
+<li>系统日志</li>
+</ul>
+</li>
+<li><p>漏洞确认</p>
+<ul>
+<li>代码审计</li>
+<li>渗透测试</li>
+<li>风险评估</li>
+</ul>
+</li>
+</ol>
+<h2 id="应急响应"><a href="#应急响应" class="headerlink" title="应急响应"></a>应急响应</h2><ol>
+<li><p>阻断攻击</p>
+<ul>
+<li>部署WAF</li>
+<li>加固配置</li>
+<li>限制访问</li>
+</ul>
+</li>
+<li><p>溯源分析</p>
+<ul>
+<li>攻击路径</li>
+<li>影响评估</li>
+<li>证据保全</li>
+</ul>
+</li>
+<li><p>修复加固</p>
+<ul>
+<li>代码修复</li>
+<li>配置优化</li>
+<li>补丁更新</li>
+</ul>
+</li>
+</ol>
+<h2 id="复盘总结"><a href="#复盘总结" class="headerlink" title="复盘总结"></a>复盘总结</h2><ol>
+<li>原因分析</li>
+<li>完善防御</li>
+<li>更新策略</li>
+<li>培训教育</li>
+</ol>
 
                 
               </div>
@@ -370,9 +595,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2025/02/05/XSS%E6%B8%97%E9%80%8F%E4%B8%8E%E9%98%B2%E5%BE%A1/" title="NO.3 XSS渗透与攻防">
+                      <a href="/2025/02/05/sqli-labs-notes/" title="SQLI-LABS 练习笔记">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">NO.3 XSS渗透与攻防</span>
+                        <span class="hidden-mobile">SQLI-LABS 练习笔记</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
